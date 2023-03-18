@@ -1,8 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { ReferenceAddedEvent } from '../../events/reference-added-event';
+import * as Constants from '../../constants';
 
-const EVENT_REFERENCE_ADDED = 'reference_added';
+const { EVENT_REFERENCE_ADDED } = Constants;
 
 @Injectable()
 export class ResultService {
@@ -11,7 +12,7 @@ export class ResultService {
   private readonly logger = new Logger(ResultService.name);
 
   async getResult(refId: string) {
-    this.logger.log('Will get results from DB');
+    this.logger.log(`Will get results from DB for ${refId}`);
   }
 
   @OnEvent(EVENT_REFERENCE_ADDED, { async: true })
