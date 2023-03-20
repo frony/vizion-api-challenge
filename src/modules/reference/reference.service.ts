@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash';
 // import { ReferenceAddedEvent } from '../../events/reference-added-event';
 import { Reference } from './reference.model';
 import { EVENT_REFERENCE_ADDED } from '../../constants';
-import { ReferenceType, ReferenceInDbType } from '../../dtp/reference-type';
+import { ReferenceType, ReferenceInDbType } from '../../dto/reference-type';
 
 @Injectable()
 export class ReferenceService {
