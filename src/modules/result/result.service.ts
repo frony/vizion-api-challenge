@@ -1,8 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
-// import { ReferenceAddedEvent } from '../../events/reference-added-event';
 import { EVENT_REFERENCE_ADDED } from '../../constants';
-import { ReferenceType, ReferenceInDbType } from '../../dto/reference-type';
+import { ReferenceType } from '../../dto/reference-type';
 
 @Injectable()
 export class ResultService {

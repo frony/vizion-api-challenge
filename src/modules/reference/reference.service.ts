@@ -2,10 +2,9 @@ import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { isEmpty } from 'lodash';
-// import { ReferenceAddedEvent } from '../../events/reference-added-event';
 import { Reference } from './reference.model';
 import { EVENT_REFERENCE_ADDED } from '../../constants';
-import { ReferenceType, ReferenceInDbType } from '../../dto/reference-type';
+import { ReferenceType } from '../../dto/reference-type';
 
 @Injectable()
 export class ReferenceService {
@@ -39,10 +38,8 @@ export class ReferenceService {
       const reference = await this.referenceModel.create({
         url: urlReference,
       });
-      this.logger.log('SUCCESS: reference was added to the DB');
       return reference;
     } catch (error) {
-      this.logger.log(error.message);
       throw new BadRequestException('Could not insert URL into the database');
     }
   }
