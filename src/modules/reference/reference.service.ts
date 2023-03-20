@@ -1,4 +1,4 @@
-import { Injectable, Logger, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { isEmpty } from 'lodash';
@@ -14,15 +14,12 @@ export class ReferenceService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  private readonly logger = new Logger(ReferenceService.name);
-
   async createReference(urlReference: string) {
     const referenceArr = await this.findReference(urlReference);
     let reference = referenceArr[0];
     if (isEmpty(reference)) {
       reference = await this.insertReference(urlReference);
     }
-    this.logger.log(reference);
     const { id, url, created_at } = reference;
     const payload: ReferenceType = {
       id,

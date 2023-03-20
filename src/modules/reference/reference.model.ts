@@ -8,7 +8,10 @@ import {
   PrimaryKey,
   DataType,
   AutoIncrement,
+  HasMany,
 } from 'sequelize-typescript';
+
+import { Result } from '../result/result.model';
 
 @Table({
   tableName: 'reference',
@@ -30,4 +33,7 @@ export class Reference extends Model {
   @UpdatedAt
   @Column(DataType.TIME)
   updated_at: Date;
+
+  @HasMany(() => Result)
+  results: Result[];
 }
