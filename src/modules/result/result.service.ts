@@ -1,9 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
-import { ReferenceAddedEvent } from '../../events/reference-added-event';
-import * as Constants from '../../constants';
-
-const { EVENT_REFERENCE_ADDED } = Constants;
+// import { ReferenceAddedEvent } from '../../events/reference-added-event';
+import { EVENT_REFERENCE_ADDED } from '../../constants';
+import { ReferenceType, ReferenceInDbType } from '../../dtp/reference-type';
 
 @Injectable()
 export class ResultService {
@@ -16,9 +15,9 @@ export class ResultService {
   }
 
   @OnEvent(EVENT_REFERENCE_ADDED, { async: true })
-  async scrapeUrl(payload: ReferenceAddedEvent) {
-    const { referenceId, url } = payload;
-    this.logger.log(`referenceId: ${referenceId}`);
+  async scrapeUrl(payload: ReferenceType) {
+    const { id, url } = payload;
+    this.logger.log(`referenceId: ${id}`);
     this.logger.log(`Scraping the URL ${url}`);
     await new Promise<void>((resolve) => setTimeout(() => resolve(), 2000));
     this.logger.log('Preparing JSON');

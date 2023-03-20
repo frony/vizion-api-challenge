@@ -1,5 +1,5 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { ReferenceService} from "./reference.service";
+import { ReferenceService } from './reference.service';
 
 @Controller()
 export class ReferenceController {
@@ -7,6 +7,6 @@ export class ReferenceController {
 
   @Post()
   reference(@Body('url') refUrl: string) {
-    return this.referenceService.insertReference(refUrl);
+    return this.referenceService.createReference(refUrl);
   }
 }

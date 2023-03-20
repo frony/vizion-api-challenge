@@ -1,29 +1,60 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, BadRequestException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { ReferenceAddedEvent } from '../../events/reference-added-event';
-import * as Constants from '../../constants';
-
-const { EVENT_REFERENCE_ADDED } = Constants;
+import { isEmpty } from 'lodash';
+// import { ReferenceAddedEvent } from '../../events/reference-added-event';
+import { Reference } from './reference.model';
+import { EVENT_REFERENCE_ADDED } from '../../constants';
+import { ReferenceType, ReferenceInDbType } from '../../dtp/reference-type';
 
 @Injectable()
 export class ReferenceService {
-  constructor(private readonly eventEmitter: EventEmitter2) {}
+  constructor(
+    @InjectModel(Reference)
+    private readonly referenceModel: typeof Reference,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   private readonly logger = new Logger(ReferenceService.name);
 
-  async insertReference(url: string) {
-    this.logger.log('Inserting into reference table');
-    await new Promise<void>((resolve) => setTimeout(() => resolve(), 3000));
-    this.logger.log(
-      'Inserted into reference table and emitting EVENT_REFERENCE_ADDED.',
-    );
-    const id = '1234'; // TODO: Get it from DB insert
-    const payload: ReferenceAddedEvent = {
-      referenceId: id,
+  async createReference(urlReference: string) {
+    const referenceArr = await this.findReference(urlReference);
+    let reference = referenceArr[0];
+    if (isEmpty(reference)) {
+      reference = await this.insertReference(urlReference);
+    }
+    this.logger.log(reference);
+    const { id, url, created_at } = reference;
+    const payload: ReferenceType = {
+      id,
       url,
+      created_at: created_at.toString(),
     };
     this.eventEmitter.emit(EVENT_REFERENCE_ADDED, payload);
-    // TODO: return reference from here
-    return payload;
+    return reference;
+  }
+
+  private async insertReference(urlReference: string) {
+    try {
+      const reference = await this.referenceModel.create({
+        url: urlReference,
+      });
+      this.logger.log('SUCCESS: reference was added to the DB');
+      return reference;
+    } catch (error) {
+      this.logger.log(error.message);
+      throw new BadRequestException('Could not insert URL into the database');
+    }
+  }
+
+  private async findReference(urlReference: string): Promise<Reference[]> {
+    const reference = await this.referenceModel.findAll({
+      limit: 1,
+      where: {
+        url: urlReference,
+      },
+    });
+
+    return reference;
   }
 }
