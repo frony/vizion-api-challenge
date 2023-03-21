@@ -4,10 +4,10 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { Reference } from './modules/reference/reference.model';
-import { ReferenceModule } from './modules/reference/reference.module';
-import { Result } from './modules/result/result.model';
-import { ResultModule } from './modules/result/result.module';
+import { Reference } from './reference/reference.model';
+import { ReferenceModule } from './reference/reference.module';
+import { Result } from './result/result.model';
+import { ResultModule } from './result/result.module';
 
 // TODO: get config values from ENV
 @Module({

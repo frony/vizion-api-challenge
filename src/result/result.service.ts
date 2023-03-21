@@ -4,11 +4,11 @@ import { OnEvent } from '@nestjs/event-emitter';
 // import { Op } from 'sequelize';
 import puppeteer from 'puppeteer';
 import { Result } from './result.model';
-import { ReferenceType } from '../../dto/reference-type';
-import { ResultInput } from '../../dto/result-types';
+import { ReferenceType } from '../dto/reference-type';
+import { ResultInput } from '../dto/result-types';
 // import { Reference } from '../reference/reference.model';
-import { isValidUrl } from '../../util/helpers';
-import { EVENT_REFERENCE_ADDED, INSERT_RESULT_ERROR } from '../../constants';
+import { isValidUrl } from '../util/helpers';
+import { EVENT_REFERENCE_ADDED, INSERT_RESULT_ERROR } from '../constants';
 
 @Injectable()
 export class ResultService {

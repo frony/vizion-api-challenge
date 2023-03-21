@@ -3,9 +3,9 @@ import { InjectModel } from '@nestjs/sequelize';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { isEmpty } from 'lodash';
 import { Reference } from './reference.model';
-import { ReferenceType } from '../../dto/reference-type';
-import { isValidUrl } from '../../util/helpers';
-import { EVENT_REFERENCE_ADDED, INSERT_REFERENCE_ERROR } from '../../constants';
+import { ReferenceType } from '../dto/reference-type';
+import { isValidUrl } from '../util/helpers';
+import { EVENT_REFERENCE_ADDED, INSERT_REFERENCE_ERROR } from '../constants';
 
 @Injectable()
 export class ReferenceService {
