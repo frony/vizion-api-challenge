@@ -1,12 +1,12 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { OnEvent } from '@nestjs/event-emitter';
-// import { Op } from 'sequelize';
+import { Op } from 'sequelize';
 import puppeteer from 'puppeteer';
 import { Result } from './result.model';
 import { ReferenceType } from '../dto/reference-type';
 import { ResultInput } from '../dto/result-types';
-// import { Reference } from '../reference/reference.model';
+import { Reference } from '../reference/reference.model';
 import { isValidUrl } from '../util/helpers';
 import { EVENT_REFERENCE_ADDED, INSERT_RESULT_ERROR } from '../constants';
 
@@ -17,14 +17,34 @@ export class ResultService {
     private readonly resultModel: typeof Result,
   ) {}
 
-  private readonly logger = new Logger(ResultService.name);
-
   async getResult(refId: string) {
-    this.logger.log(`Will get results from DB for ${refId}`);
+    try {
+      const result = await Result.findAll({
+        where: {
+          reference_id: { [Op.eq]: refId },
+        },
+        include: [
+          {
+            model: Reference,
+            attributes: ['url'],
+            where: {
+              id: { [Op.eq]: refId },
+            },
+          },
+        ],
+      });
+      return result;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
+  /**
+   * Load page from URL
+   * @param payload
+   */
   @OnEvent(EVENT_REFERENCE_ADDED, { async: true })
-  async scrapeUrl(payload: ReferenceType) {
+  async createResult(payload: ReferenceType) {
     const { id, url } = payload;
     if (isValidUrl(url)) {
       await new Promise<void>((resolve) => setTimeout(() => resolve(), 2000));
@@ -37,6 +57,11 @@ export class ResultService {
     }
   }
 
+  /**
+   * Load page via puppeteer and return title and metadata
+   * @param {string} url
+   * @private
+   */
   private async scrapePage(url: string) {
     const browser = await puppeteer.launch({ headless: true });
     try {
@@ -62,6 +87,11 @@ export class ResultService {
     }
   }
 
+  /**
+   * Insert Reference, title and metadata into Result table
+   * @param {ResultInput} payload
+   * @private
+   */
   private async insertResult(payload: ResultInput) {
     try {
       await this.resultModel.create({

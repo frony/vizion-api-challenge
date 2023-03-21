@@ -8,6 +8,7 @@ import {
   DataType,
   AutoIncrement,
   ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
 
 import { Reference } from '../reference/reference.model';
@@ -43,4 +44,7 @@ export class Result extends Model {
   @UpdatedAt
   @Column(DataType.TIME)
   updated_at: Date;
+
+  @BelongsTo(() => Reference)
+  reference: Reference;
 }
