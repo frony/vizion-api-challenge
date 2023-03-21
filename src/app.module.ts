@@ -9,7 +9,6 @@ import { ReferenceModule } from './reference/reference.module';
 import { Result } from './result/result.model';
 import { ResultModule } from './result/result.module';
 
-// TODO: get config values from ENV
 @Module({
   imports: [
     SequelizeModule.forRoot({
