@@ -4,7 +4,7 @@ import { ResultService } from './result.service';
 export class ResultController {
   constructor(private readonly resultService: ResultService) {}
   @Get(':id')
-  async result(@Param('id') refId: string) {
+  async create(@Param('id') refId: string) {
     return this.resultService.getResult(refId);
   }
 }
