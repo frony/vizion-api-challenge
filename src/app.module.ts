@@ -18,7 +18,7 @@ import { ResultModule } from './result/result.module';
       port: 5431,
       username: 'postgres',
       password: 'P0stgr35V1z10n',
-      database: 'postgres-vision',
+      database: 'postgres-vizion',
       models: [Reference, Result],
     }),
     ReferenceModule,
