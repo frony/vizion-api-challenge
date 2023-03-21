@@ -13,7 +13,7 @@ This is an API that meets the requirements of the [Vizion API Challenge](./CHALL
 ## Author
 - Marcos Frony <mfrony@gmail.com>
 
-#Set Up the project
+# Set Up the project
 ## Dependencies
 - Docker
 - PostgreSQL
