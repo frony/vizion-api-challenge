@@ -3,8 +3,9 @@ import { InjectModel } from '@nestjs/sequelize';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { isEmpty } from 'lodash';
 import { Reference } from './reference.model';
-import { EVENT_REFERENCE_ADDED } from '../../constants';
 import { ReferenceType } from '../../dto/reference-type';
+import { isValidUrl } from '../../util/helpers';
+import { EVENT_REFERENCE_ADDED, INSERT_REFERENCE_ERROR } from '../../constants';
 
 @Injectable()
 export class ReferenceService {
@@ -15,6 +16,11 @@ export class ReferenceService {
   ) {}
 
   async createReference(urlReference: string) {
+    if (!isValidUrl(urlReference)) {
+      throw new BadRequestException(
+        'URL is not valid. Make sure the URL starts with http:// or https://',
+      );
+    }
     const referenceArr = await this.findReference(urlReference);
     let reference = referenceArr[0];
     if (isEmpty(reference)) {
@@ -37,7 +43,7 @@ export class ReferenceService {
       });
       return reference;
     } catch (error) {
-      throw new BadRequestException('Could not insert URL into the database');
+      throw new BadRequestException(INSERT_REFERENCE_ERROR);
     }
   }
 
