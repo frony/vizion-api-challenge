@@ -17,6 +17,10 @@ export class ResultService {
     private readonly resultModel: typeof Result,
   ) {}
 
+  /**
+   * Find all results related to a URL
+   * @param {string} refId
+   */
   async getResult(refId: string) {
     try {
       const result = await Result.findAll({
@@ -40,20 +44,23 @@ export class ResultService {
   }
 
   /**
-   * Load page from URL
+   * Load page from URL, get metadata and insert into Result
    * @param payload
    */
   @OnEvent(EVENT_REFERENCE_ADDED, { async: true })
   async createResult(payload: ReferenceType) {
     const { id, url } = payload;
     if (isValidUrl(url)) {
-      await new Promise<void>((resolve) => setTimeout(() => resolve(), 2000));
-      const data = await this.scrapePage(url);
-      const resultInput: ResultInput = {
-        reference_id: Number(id),
-        data,
-      };
-      await this.insertResult(resultInput);
+      try {
+        const data = await this.scrapePage(url);
+        const resultInput: ResultInput = {
+          reference_id: Number(id),
+          data,
+        };
+        await this.insertResult(resultInput);
+      } catch (error) {
+        return error;
+      }
     }
   }
 

@@ -6,7 +6,7 @@ export class ReferenceController {
   constructor(private readonly referenceService: ReferenceService) {}
 
   @Post()
-  reference(@Body('url') refUrl: string) {
-    return this.referenceService.createReference(refUrl);
+  create(@Body('url') refUrl: string) {
+    return this.referenceService.create(refUrl);
   }
 }

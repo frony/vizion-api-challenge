@@ -15,7 +15,7 @@ export class ReferenceService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  async createReference(urlReference: string) {
+  async create(urlReference: string) {
     if (!isValidUrl(urlReference)) {
       throw new BadRequestException(
         'URL is not valid. Make sure the URL starts with http:// or https://',
