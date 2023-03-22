@@ -19,9 +19,9 @@ export class ResultService {
 
   /**
    * Find all results related to a URL
-   * @param {string} refId
+   * @param {number} refId
    */
-  async getResult(refId: string) {
+  async getResult(refId: number) {
     try {
       const result = await Result.findAll({
         where: {
@@ -108,5 +108,19 @@ export class ResultService {
     } catch (error) {
       throw new BadRequestException(INSERT_RESULT_ERROR);
     }
+  }
+
+  /**
+   * Delete result row
+   * @param {number} id
+   */
+  async delete(id: number) {
+    const reference = await this.resultModel.destroy({
+      where: {
+        id,
+      },
+    });
+
+    return reference;
   }
 }

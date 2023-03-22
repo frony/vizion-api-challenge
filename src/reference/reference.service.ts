@@ -15,6 +15,12 @@ export class ReferenceService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
+  /**
+   * Insert URL in the Reference table
+   * and emit the event to get the tiel and metadata of the URL
+   * and save it in the Result table
+   * @param urlReference
+   */
   async create(urlReference: string) {
     if (!isValidUrl(urlReference)) {
       throw new BadRequestException(
@@ -47,11 +53,45 @@ export class ReferenceService {
     }
   }
 
+  /**
+   * Find a reference by its URL
+   * @param {string} urlReference
+   * @private
+   */
   private async findReference(urlReference: string): Promise<Reference[]> {
     const reference = await this.referenceModel.findAll({
       limit: 1,
       where: {
         url: urlReference,
+      },
+    });
+
+    return reference;
+  }
+
+  /**
+   * Select a reference by its ID
+   * @param {number} id
+   */
+  async getById(id: number) {
+    const reference = await this.referenceModel.findAll({
+      limit: 1,
+      where: {
+        id,
+      },
+    });
+
+    return reference;
+  }
+
+  /**
+   * Select a reference by its ID
+   * @param {number} id
+   */
+  async delete(id: number) {
+    const reference = await this.referenceModel.destroy({
+      where: {
+        id,
       },
     });
 
